@@ -1,0 +1,156 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  title: Library
+  description: Demo Library API
+servers:
+  - description: Library API
+    url: 'http://localhost:8080/v1'
+components:
+  securitySchemes: {}
+  schemas:
+    Book:
+      title: Book
+      type: object
+      description: A book example
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        author:
+          type: string
+  requestBodies:
+    BookRequest:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - title
+              - description
+              - author
+            properties:
+              title:
+                type: string
+              description:
+                type: string
+              author:
+                type: string
+      description: Book request
+  responses:
+    BookResponse:
+      description: Book response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              title:
+                type: string
+              description:
+                type: string
+              author:
+                type: string
+paths:
+  /books:
+    get:
+      summary: Browse Books
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/responses/BookResponse'
+      operationId: browse-books
+      description: Browse the list of books
+    post:
+      summary: Create new Book
+      tags: []
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+                example: 'https://example.com/books/123'
+        '400':
+          description: Bad Request
+      operationId: create-book
+      description: Create a new book
+      requestBody:
+        $ref: '#/components/requestBodies/BookRequest'
+  '/books/{bookId}':
+    parameters:
+      - schema:
+          type: integer
+        name: bookId
+        in: path
+        description: The id of the book
+        required: true
+    get:
+      summary: Read Book
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/BookResponse'
+        '404':
+          description: Not Found
+      operationId: read-book
+    put:
+      summary: Update Book
+      tags: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: update-book
+      requestBody:
+        $ref: '#/components/requestBodies/BookRequest'
+    patch:
+      summary: Patch Book
+      tags: []
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: patch-book
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: title
+          description: New Book Title
+        - schema:
+            type: string
+          in: query
+          name: description
+          description: New Book Description
+        - schema:
+            type: string
+          in: query
+          name: author
+          description: New Book Author
+    delete:
+      summary: Your DELETE endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+      operationId: delete-book
