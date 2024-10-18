@@ -19,7 +19,7 @@ import (
 	//
 	//    sw "github.com/myname/myrepo/go"
 	//
-	sw "./go"
+	sw "github.com/khalilgalalem/library/go"
 )
 
 func main() {
@@ -27,5 +27,11 @@ func main() {
 
 	router := sw.NewRouter()
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	// Initialize metrics and wrap the router
+	http.Handle("/", sw.MetricsMiddleware(router))
+
+	// Expose the metrics endpoint at /metrics
+	http.Handle("/metrics", sw.PromHandler())
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }

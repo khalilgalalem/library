@@ -9,7 +9,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  VERSION: 'swagger-1.0'
+  VERSION: 'swagger-1.1'
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
